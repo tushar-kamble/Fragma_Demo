@@ -11,7 +11,11 @@ public interface IProjectService {
 	public ProjectDto getProjectById(Long projectId) throws Exception;
 
 	public List<ProjectDto> getAllProject() throws Exception;
-	
+
 	public List<ProjectDto> getAllAciveProject() throws Exception;
+
+	public List<ProjectDto> getPagableProject(Long id) throws Exception;
+
+	public List<ProjectDto> getFilterProjectDetails(String key, String id) throws Exception;
 
 }

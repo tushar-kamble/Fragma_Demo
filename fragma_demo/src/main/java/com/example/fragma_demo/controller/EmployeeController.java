@@ -138,4 +138,58 @@ public class EmployeeController {
 		}
 	}
 
+	@GetMapping(value = "/page/getEmployees/{id}")
+	public FragmaResponse<List<EmployeeDto>> getEmployees(@PathVariable Long id, @RequestHeader HttpHeaders headers) {
+
+		FragmaResponse<List<EmployeeDto>> fragmaResponse = new FragmaResponse<>();
+		FragmaResult<List<EmployeeDto>> fragmaResult = new FragmaResult<>();
+		try {
+
+			List<EmployeeDto> employeeDtos = employeeService.getPagableEmployee(id);
+
+			fragmaResult.setResult(employeeDtos);
+			fragmaResponse.setFragmaResult(fragmaResult);
+			fragmaResponse.setStatusCode(HttpStatus.OK.value());
+			fragmaResponse.setStatusMessage("get employee details successfully");
+
+			return fragmaResponse;
+
+		} catch (Exception e) {
+
+			fragmaResult.setResult(null);
+			fragmaResponse.setFragmaResult(fragmaResult);
+			fragmaResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			fragmaResponse.setStatusMessage(e.getMessage());
+
+			return fragmaResponse;
+		}
+	}
+
+	@GetMapping(value = "/filter/getEmployees/{key}/{id}")
+	public FragmaResponse<List<EmployeeDto>> getFilterEmployees(@PathVariable String key, @PathVariable String id,
+			@RequestHeader HttpHeaders headers) {
+
+		FragmaResponse<List<EmployeeDto>> fragmaResponse = new FragmaResponse<>();
+		FragmaResult<List<EmployeeDto>> fragmaResult = new FragmaResult<>();
+		try {
+
+			List<EmployeeDto> employeeDtos = employeeService.getFilterEmployeedetails(key, id);
+
+			fragmaResult.setResult(employeeDtos);
+			fragmaResponse.setFragmaResult(fragmaResult);
+			fragmaResponse.setStatusCode(HttpStatus.OK.value());
+			fragmaResponse.setStatusMessage("get employee details successfully");
+
+			return fragmaResponse;
+
+		} catch (Exception e) {
+
+			fragmaResult.setResult(null);
+			fragmaResponse.setFragmaResult(fragmaResult);
+			fragmaResponse.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+			fragmaResponse.setStatusMessage(e.getMessage());
+
+			return fragmaResponse;
+		}
+	}
 }

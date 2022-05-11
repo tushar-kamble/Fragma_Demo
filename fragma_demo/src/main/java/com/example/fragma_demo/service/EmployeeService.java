@@ -5,6 +5,10 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -146,5 +150,52 @@ public class EmployeeService implements IEmployeeService {
 		}
 
 		return employeeDtos;
+	}
+
+	@Override
+	public List<EmployeeDto> getPagableEmployee(Long employeeDto) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			Pageable pageable = PageRequest.of(employeeDto.intValue(), 10, Sort.by("Email").ascending());
+			Page<Employee> page = employeeRepo.findAll(pageable);
+
+			if (page != null && page.getContent() != null)
+				return this.convertOrmToDtoEmployee(page.getContent());
+			return null;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public List<EmployeeDto> getFilterEmployeedetails(String key, String id) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			if (key != null && !key.isEmpty() && key.equalsIgnoreCase("Name")) {
+				List<Employee> employees = employeeRepo.getFilteredEmployeeByName(id);
+				employeeRepo.findByEmployeeName(id);
+				return this.convertOrmToDtoEmployee(employees);
+			}
+
+			if (key != null && !key.isEmpty() && key.equalsIgnoreCase("Email")) {
+				List<Employee> employees = employeeRepo.getFilteredEmployeeByEmail(id);
+				employeeRepo.findByEmail(id);
+				return this.convertOrmToDtoEmployee(employees);
+			}
+
+			if (key != null && !key.isEmpty() && key.equalsIgnoreCase("Designation")) {
+				List<Employee> employees = employeeRepo.getFilteredEmployeeByDesignation(id);
+				return this.convertOrmToDtoEmployee(employeeRepo.findByDesignation(id));
+			}
+
+			return null;
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

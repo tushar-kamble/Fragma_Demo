@@ -5,11 +5,17 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.fragma_demo.dao.ProjectRepository;
+import com.example.fragma_demo.dto.EmployeeDto;
 import com.example.fragma_demo.dto.ProjectDto;
+import com.example.fragma_demo.entity.Employee;
 import com.example.fragma_demo.entity.Project;
 
 @Service
@@ -133,5 +139,44 @@ public class ProjectService implements IProjectService {
 		}
 
 		return projectdtoList;
+	}
+
+	@Override
+	public List<ProjectDto> getPagableProject(Long id) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			Pageable pageable = PageRequest.of(id.intValue(), 10, Sort.by("Email").ascending());
+			Page<Project> page = projectRepository.findAll(pageable);
+
+			if (page != null && page.getContent() != null)
+				return this.convertProjectORMtoDTO(page.getContent());
+			return null;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	@Override
+	public List<ProjectDto> getFilterProjectDetails(String key, String id) throws Exception {
+		// TODO Auto-generated method stub
+		try {
+			if (key != null && !key.isEmpty() && key.equalsIgnoreCase("clientname")) {
+				List<Project> projects = projectRepository.getFilteredProjectByClientName(id);
+			
+				return this.convertProjectORMtoDTO(projects);
+			}
+
+			if (key != null && !key.isEmpty() && key.equalsIgnoreCase("projectname")) {
+				List<Project> projects = projectRepository.getFilteredProjectByName(id);
+				return this.convertProjectORMtoDTO(projects);
+			}
+			return null;
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			throw e;
+		}
 	}
 }

@@ -11,6 +11,10 @@ public interface IEmployeeService {
 	public EmployeeDto getEmployeeById(Long employeeId) throws Exception;
 
 	public List<EmployeeDto> getAllEmployeedetails() throws Exception;
-	
+
 	public List<EmployeeDto> getActiveEmployees() throws Exception;
+
+	public List<EmployeeDto> getPagableEmployee(Long id) throws Exception;
+
+	public List<EmployeeDto> getFilterEmployeedetails(String key, String id) throws Exception;
 }
