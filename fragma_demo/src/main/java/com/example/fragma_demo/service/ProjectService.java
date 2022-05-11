@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.fragma_demo.dao.ProjectRepository;
-import com.example.fragma_demo.dto.EmployeeDto;
 import com.example.fragma_demo.dto.ProjectDto;
-import com.example.fragma_demo.entity.Employee;
 import com.example.fragma_demo.entity.Project;
 
 @Service
